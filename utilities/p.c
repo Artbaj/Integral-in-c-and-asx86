@@ -131,10 +131,12 @@ void print_poly_array(Polynomial *p) {
 
 double integrate(Polynomial* p,double start,double end,long double step){
     double area =0;
-    for(long double i=start+step;i<end;i+=step){
-        long double resoult = 0;
+    int stepAmt = (int)(end-start)/step;
+    double pos = start;
+    for(int i=0; i<stepAmt;i++){
+        pos +=step;
         for(size_t j =0;j<p->size;j++){
-           area+=riemannSum(i,p->terms[j].coefficient,p->terms[j].exponent);
+           area+=riemannSum(pos,p->terms[j].coefficient,p->terms[j].exponent);
         }
         }
         area*=step;
