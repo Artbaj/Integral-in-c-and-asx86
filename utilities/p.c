@@ -1,3 +1,4 @@
+
 #include <unistd.h>  // dla lseek, STDIN_FILENO
 #include <fcntl.h>   // dla SEEK_SET
 #include <x86intrin.h>
