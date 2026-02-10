@@ -1,10 +1,69 @@
 Polynomial Integration Engine (x86/x87 FPU)
-Project Description A low-level implementation of numerical integration algorithms utilizing x86 Assembly and the x87 FPU instruction set. The project aims to minimize CPU cycle consumption by bypassing compiler overhead in critical arithmetic sections. It features a hybrid architecture (C + ASM) designed for high-throughput polynomial evaluation.
 
-Manual FPU Stack Management: Optimized register allocation strategy to mitigate x87 stack overflow risks and reduce memory I/O latency.
+Project Overview 
 
-Instruction Level Optimization: Replaced standard fst/fld sequences with a direct register duplication strategy (fldl + fldl), ensuring operands remain in st(0)/st(1) for continuous processing.
+A low-latency polynomial integration engine designed to benchmark and optimize arithmetic throughput on x86 architectures. The project implements the Riemann Sum approximation algorithm, manually optimized in x86 Assembly (AT&T syntax) utilizing the x87 FPU instruction set.
+Used skills:
+Systems Programming & Architecture: Deep understanding of the System V ABI, stack memory management, and register allocation strategies.
 
-Performance Profiling: Conducted rigorous benchmarking using CPU cycle counters (RDTSC). Achieved a 12.6% reduction in execution cycles for quadratic polynomial integration compared to the baseline implementation.
+Performance Engineering: Utilizing manual loop unrolling and register-based accumulation to minimize Memory I/O latency (Load/Store reduction).
 
-Precision Control: Maintained double-extended precision results (verified to 7 decimal places) while optimizing for speed
+Hardware-Aware Optimization: Writing code that respects CPU pipeline mechanics to reduce cycle count (verified via RDTSC profiling).
+
+Hybrid Development: Linking high-level C drivers with low-level Assembly modules.
+
+Low-Level Debugging: Advanced state analysis using GDB to monitor FPU status words and register stacks.
+
+Tech Stack
+
+Languages: C11 (Driver/Logic), x86 Assembly (Compute Kernels).
+
+Tools: GCC , GDB, Valgrind.
+
+Core Concepts: IEEE 754, Algorithm Complexity, Cache Locality.
+
+
+
+
+Tests:
+
+Original version:
+
+y = +2.0x^2
+
+step = 0.001
+
+x E <0.000000 , 1.000000> ∫y(x) = 0.66
+
+takes on average: 183604 cycles
+
+takes on average:0.010127 ms
+
+
+
+
+
+Current:
+step=0.001
+
+y = +2.0x^2
+
+dla x E <0.000000 , 1.000000> Sy(x) = 0.66
+
+Takes on average 110797 cycles
+
+takes on average:0.006086 ms
+
+
+
+
+Accuracy Test:
+step=0.000001
+
+y = +2.0x^2
+
+dla x E <0.000000 , 1.000000> Sy(x) = 0.666666
+
+Takes on average 54286687 cycles
+
+takes on average:2.963396 ms

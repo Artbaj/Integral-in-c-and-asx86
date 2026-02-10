@@ -23,7 +23,7 @@ typedef struct{
 }Polynomial;
 
 
-extern double powerOpt(double x,int exp);
+extern double riemannSum(double x,double coefficient,int exp);
 extern unsigned long long miernik(void);
 void init_poly(Polynomial* p);
 int compare_terms(const void *a, const void *b);
@@ -31,7 +31,7 @@ void print_poly_array(Polynomial *p);
 void add_term_array(Polynomial *p, int exp, double coeff); 
 double poly_eval(Polynomial* p,double x);
 double integrate(Polynomial* p,double start,double end,long double step);
-void testing(double X,int power);
+void testing(double X,double coefficient, int power);
 
 
 int main() 
@@ -42,6 +42,7 @@ int main()
     int count = 1;
     Polynomial p;
     init_poly(&p);
+    testing(0.2,2.,2);
     do{
         printf("Provide an coefficient [0 if u are done]\n");
         scanf("%lf",&coefficient);
@@ -78,7 +79,7 @@ int main()
     printf("y = ");
     print_poly_array(&p);
     printf("dla x E <%lf , %lf> Sy(x) = %lf\n",startI,endI,resoult);
-    printf("Takes on average %llu cycles\nstakes on average:%lf ms\n",average/100,avg_ms);
+    printf("Takes on average %llu cycles\ntakes on average:%lf ms\n",average/100,avg_ms);
     return 0;
 
 
@@ -133,13 +134,12 @@ double integrate(Polynomial* p,double start,double end,long double step){
     for(long double i=start+step;i<end;i+=step){
         long double resoult = 0;
         for(size_t j =0;j<p->size;j++){
-           resoult+=p->terms[j].coefficient*powerOpt(i,p->terms[j].exponent);//zmienic calkowicie na assembly i przez wskaznik
+           area+=riemannSum(i,p->terms[j].coefficient,p->terms[j].exponent);
         }
-    
-           area += resoult*step;
         }
+        area*=step;
     return area;
-};
-void testing(double X,int power){
-    powerOpt(X,power);//zmienic calkowicie na assembly i przez wskaznik
+}
+void testing(double X,double coefficient,int power){
+    printf("%lf\n",riemannSum(X,coefficient,power));//zmienic calkowicie na assembly i przez wskaznik
 } 
