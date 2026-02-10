@@ -4,10 +4,11 @@
 #include <math.h>
 #include <stdint.h>
 #include <time.h>
-//extern uint16_t get_fpu_control_word(void);
+extern uint16_t get_fpu_control_word(void);
 //extern uint16_t get_status(void);
 
-//extern void change_precision(void);
+extern void change_precision(void);
+extern unsigned long long miernik(void);
 #include <stdio.h>
 #include <stdint.h>
 typedef struct {
@@ -29,14 +30,18 @@ int compare_terms(const void *a, const void *b);
 void print_poly_array(Polynomial *p); 
 void add_term_array(Polynomial *p, int exp, double coeff); 
 double poly_eval(Polynomial* p,double x);
-double integrate(Polynomial* p,double start,double end,double step);
-int main() {
-    double startI,endI,step,coefficient;
+double integrate(Polynomial* p,double start,double end,long double step);
+void testing(double X,int power);
+
+
+int main() 
+{
+    double startI,endI,coefficient;
+    long double step;
     int exponent;
     int count = 1;
     Polynomial p;
     init_poly(&p);
-
     do{
         printf("Provide an coefficient [0 if u are done]\n");
         scanf("%lf",&coefficient);
@@ -51,18 +56,29 @@ int main() {
    
 
     print_poly_array(&p);
-    printf("podaj start koniec i step\n");
-    scanf("%lf %lf %lf",&startI,&endI,&step);
+    printf("state starting point ending point and step size\n");
+    scanf("%lf %lf %Lf",&startI,&endI,&step);
    
     FILE *plik = fopen("time.txt","w");
-    clock_t start = clock();
-    double resoult =  integrate(&p,startI,endI,step);
-    clock_t end= clock();
+    double resoult;
+    unsigned long long average =0;
+    for(int i=0;i<100;i++){
+       unsigned long long start = miernik(); 
+      resoult =  integrate(&p,startI,endI,step);
+       average+= miernik()-start;
+    }
+   clock_t t = clock();
+    
+    for(int i = 0; i < 100; i++) resoult =  integrate(&p,startI,endI,step);
+
+    
+    t = clock() - t;
+    double avg_ms = ((double)t / CLOCKS_PER_SEC) * 100.0 / 100.0;
+
     printf("y = ");
     print_poly_array(&p);
     printf("dla x E <%lf , %lf> Sy(x) = %lf\n",startI,endI,resoult);
-    double time_spent = (double)(end - start) / CLOCKS_PER_SEC * 1000; // w ms
-    printf("Czas wykonania: %.6f ms\n", time_spent);
+    printf("Takes on average %llu cycles\nstakes on average:%lf ms\n",average/100,avg_ms);
     return 0;
 
 
@@ -101,6 +117,7 @@ int compare_terms(const void *a, const void *b) {
 
 }
 
+
 void print_poly_array(Polynomial *p) {
     qsort(p->terms, p->size, sizeof(Term), compare_terms);
     for (size_t i = 0; i < p->size; i++) {
@@ -111,20 +128,18 @@ void print_poly_array(Polynomial *p) {
     printf("\n");
 }
 
-double poly_eval(Polynomial *p,double x){
-    double resoult = 0;
-    for(size_t i =0;i<p->size;i++){
-        resoult+=p->terms[i].coefficient*powerOpt(x,p->terms[i].exponent);
-    }
-    return resoult;
-
-
-}
-double integrate(Polynomial* p,double start,double end,double step){
-        double area =0;
-        for(double i=start;i<end-step;i+=step){
-            area += poly_eval(p,i)*step;
+double integrate(Polynomial* p,double start,double end,long double step){
+    double area =0;
+    for(long double i=start+step;i<end;i+=step){
+        long double resoult = 0;
+        for(size_t j =0;j<p->size;j++){
+           resoult+=p->terms[j].coefficient*powerOpt(i,p->terms[j].exponent);//zmienic calkowicie na assembly i przez wskaznik
         }
-        return area;
-    };
-
+    
+           area += resoult*step;
+        }
+    return area;
+};
+void testing(double X,int power){
+    powerOpt(X,power);//zmienic calkowicie na assembly i przez wskaznik
+} 
