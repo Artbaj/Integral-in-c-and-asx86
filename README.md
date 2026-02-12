@@ -44,6 +44,6 @@ takes on average:0.010127 ms
 
 Current (Calculated using Leibniz integral rule; This result will serve as the baseline.):
 y = +2.0x^2
-dla x E <0.000000 , 1.000000> Sy(x) = 0.666667
+dla x E <0.000000 , 1.000000> ∫y(x) = 0.666667
 Takes on average 699 cycles
 takes on average:0.000015 ms
