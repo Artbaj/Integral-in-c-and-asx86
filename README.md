@@ -27,7 +27,7 @@ Core Concepts: IEEE 754, Algorithm Complexity, Cache Locality.
 
 Tests:
 
-Original version:
+Original version (Calculated using Riemann summ):
 
 y = +2.0x^2
 
@@ -42,28 +42,8 @@ takes on average:0.010127 ms
 
 
 
-
-Current:
-step=0.001
-
+Current (Calculated using Leibniz integral rule; This result will serve as the baseline.):
 y = +2.0x^2
-
-dla x E <0.000000 , 1.000000> Sy(x) = 0.66
-
-Takes on average 110797 cycles
-
-takes on average:0.006086 ms
-
-
-
-
-Accuracy Test:
-step=0.000001
-
-y = +2.0x^2
-
-dla x E <0.000000 , 1.000000> Sy(x) = 0.666666
-
-Takes on average 54286687 cycles
-
-takes on average:2.963396 ms
+dla x E <0.000000 , 1.000000> Sy(x) = 0.666667
+Takes on average 699 cycles
+takes on average:0.000015 ms
