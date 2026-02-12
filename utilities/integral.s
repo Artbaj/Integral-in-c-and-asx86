@@ -44,7 +44,6 @@ evaluate:
         popl %ebx
         leave
         ret
-	
 
      negPower:
       	fldl 8(%ebp)
@@ -64,7 +63,7 @@ evaluate:
 
     doneNeg:
         xorl %eax,%eax
-        fstp %st(1)
+        ffree %st(1)
         fdivrl one
         fmull 16(%ebp)
         popl %ebx
@@ -82,4 +81,9 @@ evaluate:
         fldl 8(%ebp)
         leave
         ret
+
+
+
+
+
 

@@ -29,19 +29,18 @@ void init_poly(Polynomial* p);
 int compare_terms(const void *a, const void *b);
 void print_poly_array(Polynomial *p); 
 void add_term_array(Polynomial *p, int exp, double coeff); 
-double integrate(Polynomial* p,double start,double end,double step);
+double integrate(Polynomial* p,double start,double end);
 void testing(double X,double coefficient, int power);
-void statisticalTests(Polynomial* p,double start,double end,double step);
+void statisticalTests(Polynomial* p,double start,double end);
 
 int main() 
 {
     double startI,endI,coefficient;
-    long double step;
+    
     int exponent;
     int count = 1;
     Polynomial p;
     init_poly(&p);
-    testing(2.13,5.,0);
     do{
         printf("Provide an coefficient [0 if u are done]\n");
         scanf("%lf",&coefficient);
@@ -56,9 +55,9 @@ int main()
    
 
     print_poly_array(&p);
-    printf("state starting point ending point and step size\n");
-    scanf("%lf %lf %Lf",&startI,&endI,&step);
-   statisticalTests(&p,startI,endI,step); 
+    printf("state starting point and end point\n");
+    scanf("%lf %lf",&startI,&endI);
+   statisticalTests(&p,startI,endI); 
    return 0;
 
 
@@ -97,27 +96,27 @@ int compare_terms(const void *a, const void *b) {
 
 }
 
-void statisticalTests(Polynomial* p,double start,double end,double step){
+void statisticalTests(Polynomial* p,double start,double end){
      FILE *plik = fopen("time.txt","w");
     double resoult;
     unsigned long long average =0;
-    for(int i=0;i<100;i++){
+    for(int i=0;i<1000;i++){
        unsigned long long tstart = miernik(); 
-      resoult =  integrate(p,start,end,step);
+      resoult =  integrate(p,start,end);
        average+= miernik()-tstart;
     }
-   clock_t t = clock();
+    clock_t t = clock();
     
-    for(int i = 0; i < 100; i++) resoult =  integrate(p,start,end,step);
+    for(int i = 0; i < 1000; i++) resoult =  integrate(p,start,end);
 
     
     t = clock() - t;
-    double avg_ms = ((double)t / CLOCKS_PER_SEC) * 100.0 / 100.0;
+    double avg_ms = ((double)t / CLOCKS_PER_SEC) * 100.0 / 1000.0;
 
     printf("y = ");
     print_poly_array(p);
     printf("dla x E <%lf , %lf> Sy(x) = %lf\n",start,end,resoult);
-    printf("Takes on average %llu cycles\ntakes on average:%lf ms\n",average/100,avg_ms);
+    printf("Takes on average %llu cycles\ntakes on average:%lf ms\n",average/1000,avg_ms);
     
     
 
@@ -133,19 +132,24 @@ void print_poly_array(Polynomial *p) {
     printf("\n");
 }
 
-double integrate(Polynomial* p,double start,double end,double step){
-    double area =0;
-    double pos = start;
-    int stepAmt = (int)(end-start)/step;
-    for(int i=0;i<stepAmt;i++){
-        pos+=step;
-        for(size_t j =0;j<p->size;j++){
-           area+=evaluate(pos,p->terms[j].coefficient,p->terms[j].exponent);//dopisac dla exp<=0
+double integrate(Polynomial* p,double start,double end){
+    
+    long double Fa=0.;
+    long double Fb=0.; 
+     for(size_t j =0;j<p->size;j++){
+           double intedCoefficient = p->terms[j].coefficient*(1/(1+(double)p->terms[j].exponent));
+           int newExponent = p->terms[j].exponent+1;
+           Fa+=evaluate(start,intedCoefficient,newExponent);
+           Fb+=evaluate(end,intedCoefficient,newExponent);
         }
-    }
-    area*=step;
-    return area;
+   
+      return Fb-Fa;
 }
 void testing(double X,double coefficient,int power){
-    printf("%lf\n",evaluate(X,coefficient,power));//zmienic calkowicie na assembly i przez wskaznik
+     double Fa=0.; 
+
+    double intedCoefficient = coefficient*(1/(1+(double)power));
+    int newExponent = power+1;
+    Fa+=evaluate(X,intedCoefficient,newExponent);
+    printf("%lf\n",Fa);
 } 
