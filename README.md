@@ -25,9 +25,9 @@ Core Concepts: IEEE 754, Algorithm Complexity, Cache Locality.
 
 
 
-Tests:
+<details>
 
-Original version (Calculated using Riemann summ):
+  "Original version (Calculated using Riemann summ)":
 
 y = +2.0x^2
 
@@ -51,3 +51,6 @@ dla x E <0.000000 , 1.000000> ∫y(x) = 0.666667
 Takes on average 699 cycles
 
 takes on average:0.000015 ms
+</details>
+
+
