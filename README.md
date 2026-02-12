@@ -26,8 +26,8 @@ Core Concepts: IEEE 754, Algorithm Complexity, Cache Locality.
 
 
 <details>
-
-  "Original version (Calculated using Riemann summ)":
+<b> Original version (Calculated using Riemann summ):</b>
+ 
 
 y = +2.0x^2
 
@@ -41,8 +41,8 @@ takes on average:0.010127 ms
 
 
 
+<b>Current (Calculated using Leibniz integral rule; This result will serve as the baseline.): </b>
 
-Current (Calculated using Leibniz integral rule; This result will serve as the baseline.):
 
 y = +2.0x^2
 
