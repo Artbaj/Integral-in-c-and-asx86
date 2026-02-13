@@ -2,13 +2,13 @@ Polynomial Integration Engine (x86/x87 FPU)
 
 Project Overview 
 
-A low-latency polynomial integration engine designed to benchmark and optimize arithmetic throughput on x86 architectures. The project implements the Riemann Sum approximation algorithm, manually optimized in x86 Assembly (AT&T syntax) utilizing the x87 FPU instruction set.
+A low-latency polynomial integration engine. 
 Used skills:
 Systems Programming & Architecture: Deep understanding of the System V ABI, stack memory management, and register allocation strategies.
 
 Performance Engineering: Utilizing manual loop unrolling and register-based accumulation to minimize Memory I/O latency (Load/Store reduction).
 
-Hardware-Aware Optimization: Writing code that respects CPU pipeline mechanics to reduce cycle count (verified via RDTSC profiling).
+Hardware-Aware Optimization: Writing code that respects CPU pipeline mechanics to reduce cycle count.
 
 Hybrid Development: Linking high-level C drivers with low-level Assembly modules.
 
@@ -16,7 +16,7 @@ Low-Level Debugging: Advanced state analysis using GDB to monitor FPU status wor
 
 Tech Stack
 
-Languages: C11 (Driver/Logic), x86 Assembly (Compute Kernels).
+Languages: C, x86 Assembly .
 
 Tools: GCC , GDB, Valgrind.
 
